@@ -44,7 +44,7 @@ fun TodoListScreen(
     isDarkTheme: MutableState<Boolean>
 ) {
     val isAddButtonRotated = rememberSaveable { mutableStateOf(false) }
-    val addButtonRotation = animatedRotation(isAddButtonRotated.value, expandedAngle = 45f)
+    val addButtonRotation = animatedRotation(isAddButtonRotated.value, expandedAngle = 90f)
 
     LaunchedEffect(Unit) {
         isAddButtonRotated.value = false

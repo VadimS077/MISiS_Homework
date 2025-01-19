@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -118,7 +119,7 @@ private fun TaskCheckbox(item: TodoItem, onComplete: (Boolean) -> Unit, checkbox
         modifier = Modifier
             .size(24.dp)
             .padding()
-            .border(2.dp, checkboxBorderColor, RoundedCornerShape(20))
+            .border(1.dp, checkboxBorderColor, CircleShape)
     )
 }
 
@@ -138,22 +139,31 @@ private fun TaskTextContent(item: TodoItem, textColor: Color, iconColor: Color) 
     Column(
         verticalArrangement = Arrangement.spacedBy(2.dp),
     ) {
-        Text(
-            text = if (item.importance == TaskImportance.HIGH) "❗ " + item.bodyText else item.bodyText,
-            textAlign = TextAlign.Left,
-            color = textColor,
-            style = if (item.isDone) {
-                TextStyle(textDecoration = TextDecoration.LineThrough)
-            } else {
-                TextStyle()
-            },
-            maxLines = 3,
-            overflow = TextOverflow.Ellipsis,
-        )
+
+        Box(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = if (item.importance == TaskImportance.HIGH) "❗ " + item.bodyText else item.bodyText,
+                textAlign = TextAlign.Left,
+                color = textColor,
+                style = if (item.isDone) {
+                    TextStyle(textDecoration = TextDecoration.LineThrough)
+                } else {
+                    TextStyle()
+                },
+                maxLines = 3,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.align(Alignment.TopStart)
+            )
+        }
 
         item.deadline?.let { deadline ->
-            Spacer(modifier = Modifier.height(4.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Spacer(modifier = Modifier.height(2.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start
+            ) {
                 Icon(
                     imageVector = Icons.Default.DateRange,
                     contentDescription = "Deadline",
@@ -163,12 +173,14 @@ private fun TaskTextContent(item: TodoItem, textColor: Color, iconColor: Color) 
                 Spacer(modifier = Modifier.size(10.dp))
                 Text(
                     text = convertMillisToDate(deadline.toEpochSecond() * 1000),
-                    color = textColor
+                    color = textColor,
+                    style = MaterialTheme.typography.bodySmall
                 )
             }
         }
     }
 }
+
 
 @Composable
 private fun InfoButton(showInfo: MutableState<Boolean>) {
@@ -320,6 +332,14 @@ fun TaskUI(
                     )
                 }
             }
+
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxSize(),
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.CenterVertically
+        ){
             if (offsetX.value < 0) {
                 IconButton(onClick = {  onDelete(item.id) }) {
                     Icon(

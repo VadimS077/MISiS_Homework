@@ -141,17 +141,18 @@ private fun TaskDescriptionInput(
 ) {
     Box(
         modifier = Modifier
-            .fillMaxWidth()
             .clip(RoundedCornerShape(5.dp))
+            .fillMaxSize()
             .border(
                 width = 1.dp,
                 color = MaterialTheme.colorScheme.outlineVariant,
                 shape = RoundedCornerShape(5.dp)
             )
     ) {
-        OutlinedTextField(
+        TextField(
             value = taskText,
             onValueChange = onTaskTextChange,
+            modifier = Modifier.fillMaxSize(),
             colors = OutlinedTextFieldDefaults.colors(
                 focusedTextColor = MaterialTheme.colorScheme.onSecondary,
                 unfocusedTextColor = MaterialTheme.colorScheme.onSecondary

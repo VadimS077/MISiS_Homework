@@ -1,5 +1,6 @@
 package com.example.misis.Core.ToDoItem
 
+
 import java.time.OffsetDateTime
 
 enum class TaskImportance {
@@ -10,9 +11,9 @@ enum class TaskImportance {
 
 fun mapTaskImportanceToText(importance: TaskImportance): String {
     return when (importance) {
-        TaskImportance.LOW ->  "Низкая"
-        TaskImportance.DEFAULT ->  "Средняя"
-        TaskImportance.HIGH ->  "❗❗ Высокая"
+        TaskImportance.LOW -> "⬇"
+        TaskImportance.DEFAULT ->  "нет"
+        TaskImportance.HIGH ->  "❗❗ "
     }
 }
 
