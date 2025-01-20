@@ -9,6 +9,11 @@ class TaskRepository : ViewModel() {
 
     private val tasks = mutableStateListOf<TodoItem>()
 
+    init {
+        val storedTasks = TaskStorage.retrieveTasks()
+        tasks.addAll(storedTasks)
+    }
+
     fun createTask(task: TodoItem) {
         tasks.add(task)
         TaskStorage.saveTask(task)

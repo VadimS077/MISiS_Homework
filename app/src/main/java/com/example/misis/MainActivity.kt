@@ -44,9 +44,9 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun initializeTaskStorage() {
-        val preferences: SharedPreferences = getPreferences(MODE_PRIVATE)
-        TaskStorage.initialize(preferences)
+        TaskStorage.initialize(applicationContext)
     }
+
 
     private fun createInitialSelectedItemState(): MutableState<TodoItem> {
         return mutableStateOf(

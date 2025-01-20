@@ -1,29 +1,45 @@
 package com.example.misis.Core.TaskStorage
 
-import android.content.SharedPreferences
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
 import com.example.misis.Core.ToDoItem.TodoItem
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
+
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "tasks_datastore")
 
 object TaskStorage {
-    private var sharedPreferences: SharedPreferences? = null
+    private lateinit var dataStore: DataStore<Preferences>
     private val gson = Gson()
+    private val tasksKey = stringPreferencesKey("Tasks")
 
-    fun initialize(preferences: SharedPreferences) {
-        sharedPreferences = preferences
+    fun initialize(context: Context) {
+        dataStore = context.dataStore
     }
 
     fun saveTasks(tasks: List<TodoItem>) {
-        sharedPreferences?.edit()?.putString("Tasks", gson.toJson(tasks))?.apply()
+        runBlocking {
+            dataStore.edit { preferences ->
+                preferences[tasksKey] = gson.toJson(tasks)
+            }
+        }
     }
 
     fun retrieveTasks(): List<TodoItem> {
-        val tasksJson = sharedPreferences?.getString("Tasks", null)
-        return if (tasksJson.isNullOrEmpty()) {
-            emptyList()
-        } else {
-            val taskType = object : TypeToken<List<TodoItem>>() {}.type
-            gson.fromJson(tasksJson, taskType) ?: emptyList()
+        return runBlocking {
+            val tasksJson = dataStore.data.first()[tasksKey]
+            if (tasksJson.isNullOrEmpty()) {
+                emptyList()
+            } else {
+                val taskType = object : TypeToken<List<TodoItem>>() {}.type
+                gson.fromJson(tasksJson, taskType) ?: emptyList()
+            }
         }
     }
 

@@ -59,6 +59,7 @@ dependencies {
     implementation(libs.androidx.material3.android)
     implementation(libs.androidx.storage)
     implementation(libs.androidx.navigation.compose)
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
